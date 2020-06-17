@@ -1,0 +1,28 @@
+stages:
+  - stage: Build
+    jobs:
+    - job: Build
+      pool:
+        vmImage: 'ubuntu-latest'
+      continueOnError: true
+      steps:
+      - script: echo my first build job
+  - stage: Deploy
+    jobs:
+      # track deployments on the environment
+    - deployment: DeployWeb
+      pool:
+        vmImage: 'ubuntu-latest'
+      # creates an environment if it doesn’t exist
+      # Environments represent the group of resources targeted by a pipeline
+      # For example, Kubernetes clusters, Azure Web Apps, virtual machines, and databases.
+      environment: 'smart-hotel-dev'
+      # The strategy keyword. This impacts the deployment strategy,
+      # which defines how your application is rolled out across the cluster.
+      strategy:
+        # The default strategy is runOnce, but in the future you’ll be able to
+        # easily indicate other strategies, such as canary or blue-green
+        runOnce:
+          deploy:
+            steps:
+            - script: echo my first deployment
